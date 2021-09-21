@@ -1,5 +1,6 @@
 var img;
 var status="";
+var objects=[];
 function preload(){
     img=loadImage('dog_cat.jpg');
 }
@@ -11,16 +12,16 @@ function setup(){
 }
 function draw(){
     image(img, 0 , 0 , 640 , 420);
+    if(status!=""){
+   for(i=0; i<objects.length; i++){
+    document.getElementById("status").innerHTML="status : object detected";
     fill("red");
-    text("dog", 45, 75);
+    percent=floor(objects[i].confidence*100);
+    text(objects[i].label+""+ percent+"%", objects[i].x+15, objects[i].y+15);
     noFill();
     stroke("red");
-    rect(30, 60, 450, 350);
-    fill("red");
-    text("cat", 320, 120);
-    noFill();
-    stroke("red");
-    rect(300, 90, 270, 320);
+    rect(objects[i].x, objects[i].y, objects[i].width, objects[i].height);
+   }}
 }
 function modelLoaded(){
     status=true;
@@ -32,5 +33,6 @@ function gotResult(error, results){
     }
     else{
         console.log(results);
+        objects=results;
     }
 }
